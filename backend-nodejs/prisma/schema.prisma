@@ -1,0 +1,31 @@
+// Prisma 스키마 파일
+// Go, Python, Java 백엔드와 동일한 데이터베이스 구조
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 사용자 역할 enum
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// 사용자 모델 (다른 백엔드와 동일한 테이블 구조)
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+} 

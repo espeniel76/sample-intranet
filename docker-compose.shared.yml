@@ -1,0 +1,27 @@
+services:
+  # 공유 PostgreSQL 데이터베이스
+  postgres:
+    image: postgres:15
+    container_name: sample_intranet_postgres_shared
+    environment:
+      POSTGRES_DB: sample_intranet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_shared_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shared_network
+
+volumes:
+  postgres_shared_data:
+
+networks:
+  shared_network:
+    driver: bridge 

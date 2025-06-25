@@ -1,0 +1,47 @@
+services:
+  # Go 백엔드 애플리케이션
+  app:
+    build: .
+    container_name: sample_intranet_backend_go
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_HOST: sample_intranet_postgres_shared
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_DBNAME: sample_intranet
+      DATABASE_SSLMODE: disable
+    volumes:
+      - ./config:/app/config
+    networks:
+      - shared_network
+    depends_on:
+      - postgres
+
+  # 공유 PostgreSQL 데이터베이스 참조
+  postgres:
+    image: postgres:15
+    container_name: sample_intranet_postgres_shared
+    environment:
+      POSTGRES_DB: sample_intranet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_shared_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shared_network
+
+volumes:
+  postgres_shared_data:
+
+networks:
+  shared_network:
+    driver: bridge 

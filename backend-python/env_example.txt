@@ -1,0 +1,14 @@
+# 데이터베이스 설정 (Go 백엔드와 공유)
+DATABASE_URL=postgresql://postgres:password@localhost:5432/sample_intranet
+
+# JWT 설정
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_EXPIRES_HOURS=24
+JWT_ALGORITHM=HS256
+
+# 애플리케이션 설정
+APP_NAME="Sample Intranet Backend Python"
+DEBUG=true
+
+# CORS 설정 (쉼표로 구분된 URL 목록)
+CORS_ORIGINS=*

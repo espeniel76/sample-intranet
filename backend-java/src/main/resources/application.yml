@@ -1,0 +1,58 @@
+# Spring Boot 애플리케이션 설정
+spring:
+  application:
+    name: sample-intranet-backend-java
+
+  # 데이터소스 설정 (공유 데이터베이스)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sample_intranet
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: update # 테이블 자동 생성/업데이트
+    show-sql: true # SQL 쿼리 로깅
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # 개발 모드 설정
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# 서버 설정
+server:
+  port: 9090 # Go(8080), Python(8000)과 구분
+  servlet:
+    context-path: /
+
+# JWT 설정
+jwt:
+  secret: your-super-secret-jwt-key-change-this-in-production-spring
+  expiration: 86400000 # 24시간 (밀리초)
+
+# 로깅 설정
+logging:
+  level:
+    com.example.intranet: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# 관리 엔드포인트 (Actuator)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

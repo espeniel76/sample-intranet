@@ -1,0 +1,54 @@
+services:
+  # PHP Slim Framework 백엔드 애플리케이션
+  app:
+    build: .
+    container_name: sample_intranet_backend_php
+    ports:
+      - "8090:8090"  # PHP 내장 서버 포트
+    environment:
+      APP_DEBUG: "false"
+      LOG_LEVEL: "info"
+      DB_HOST: sample_intranet_postgres_shared
+      DB_PORT: 5432
+      DB_NAME: sample_intranet
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      JWT_SECRET: your-super-secret-jwt-key-change-this-in-production-php
+      JWT_EXPIRES_IN: 86400
+      CORS_ORIGINS: "*"
+    volumes:
+      - .:/app  # 개발 시 코드 변경 실시간 반영
+      - /app/vendor  # vendor 폴더 제외
+    command: php -S 0.0.0.0:8090 -t public  # 개발 모드로 실행
+    networks:
+      - shared_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # 공유 PostgreSQL 데이터베이스 참조
+  postgres:
+    image: postgres:15
+    container_name: sample_intranet_postgres_shared
+    environment:
+      POSTGRES_DB: sample_intranet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_shared_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shared_network
+
+volumes:
+  postgres_shared_data:
+
+networks:
+  shared_network:
+    driver: bridge 
