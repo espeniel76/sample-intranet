@@ -1,0 +1,47 @@
+[package]
+name = "sample-intranet-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# 웹 프레임워크
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# 데이터베이스
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid"] }
+
+# 직렬화/역직렬화
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# 시간 관리
+chrono = { version = "0.4", features = ["serde"] }
+
+# 비밀번호 해싱
+bcrypt = "0.15"
+
+# JWT 토큰
+jsonwebtoken = "9.2"
+
+# 로깅
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# 에러 처리
+anyhow = "1.0"
+thiserror = "1.0"
+
+# 환경 변수
+dotenvy = "0.15"
+
+# 유효성 검사
+validator = { version = "0.18", features = ["derive"] }
+
+# UUID
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# HTTP 상태코드
+http = "1.0" 

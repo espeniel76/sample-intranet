@@ -1,6 +1,6 @@
 # 🏢 Sample Intranet Project
 
-**5개 언어**로 구현된 회원관리 인트라넷 시스템입니다. 각 백엔드는 동일한 API 스펙을 제공하며 같은 PostgreSQL 데이터베이스를 공유합니다.
+**6개 언어**로 구현된 회원관리 인트라넷 시스템입니다. 각 백엔드는 동일한 API 스펙을 제공하며 같은 PostgreSQL 데이터베이스를 공유합니다.
 
 ## 📁 프로젝트 구조
 
@@ -11,6 +11,7 @@ sample-intranet/
 ├── backend-java/             # ☕ Java 백엔드 (Spring Boot + JPA)
 ├── backend-nodejs/           # 🟢 Node.js 백엔드 (Express + Prisma)
 ├── backend-php/              # 🐘 PHP 백엔드 (Slim + PDO)
+├── backend-rust/             # 🦀 Rust 백엔드 (Axum + SQLx)
 ├── frontend/                 # 🌐 프론트엔드 (빈 폴더)
 ├── docker-compose.shared.yml # 공유 데이터베이스 설정
 └── README.md                # 이 파일
@@ -18,7 +19,7 @@ sample-intranet/
 
 ## 🗄️ 공유 데이터베이스 구조
 
-**5개 백엔드 모두 동일한 PostgreSQL 데이터베이스**를 사용합니다:
+**6개 백엔드 모두 동일한 PostgreSQL 데이터베이스**를 사용합니다:
 
 - **데이터베이스명**: `sample_intranet`
 - **포트**: `5432`
@@ -83,7 +84,16 @@ composer install
 composer start
 ```
 
-### 7️⃣ 모든 백엔드 동시 실행 (권장)
+### 7️⃣ Rust 백엔드 실행
+```bash
+cd backend-rust
+docker-compose up --build
+
+# 또는 로컬 실행
+cargo run
+```
+
+### 8️⃣ 모든 백엔드 동시 실행 (권장)
 ```bash
 # 1. 공유 데이터베이스 시작
 docker-compose -f docker-compose.shared.yml up -d
@@ -94,6 +104,7 @@ cd backend-python && docker-compose up app --build
 cd backend-java && docker-compose up app --build
 cd backend-nodejs && docker-compose up app --build
 cd backend-php && docker-compose up app --build
+cd backend-rust && docker-compose up app --build
 ```
 
 ## 🔗 접속 정보
@@ -105,25 +116,26 @@ cd backend-php && docker-compose up app --build
 | **Java API** | http://localhost:9090 | 9090 |
 | **Node.js API** | http://localhost:3000 | 3000 |
 | **PHP API** | http://localhost:8090 | 8090 |
+| **Rust API** | http://localhost:8070 | 8070 |
 | **API 문서 (Python)** | http://localhost:8000/docs | - |
 | **PostgreSQL** | localhost:5432 | 5432 |
 
 ## 🎯 주요 API 엔드포인트
 
-### **공통 엔드포인트 (5개 언어 모두 동일)**
-| 기능 | Go (8080) | Python (8000) | Java (9090) | Node.js (3000) | PHP (8090) |
-|------|-----------|---------------|-------------|---------------|------------|
-| 헬스체크 | `GET /health` | `GET /health` | `GET /api/v1/health` | `GET /api/v1/health` | `GET /health` |
-| 회원가입 | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` |
-| 로그인 | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` |
-| 사용자 목록 | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` |
-| 사용자 조회 | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` |
-| 사용자 수정 | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` |
-| 사용자 삭제 | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` |
+### **공통 엔드포인트 (6개 언어 모두 동일)**
+| 기능 | Go (8080) | Python (8000) | Java (9090) | Node.js (3000) | PHP (8090) | Rust (8070) |
+|------|-----------|---------------|-------------|---------------|------------|-------------|
+| 헬스체크 | `GET /health` | `GET /health` | `GET /api/v1/health` | `GET /api/v1/health` | `GET /health` | `GET /health` |
+| 회원가입 | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` | `POST /api/v1/auth/register` |
+| 로그인 | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` | `POST /api/v1/auth/login` |
+| 사용자 목록 | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` | `GET /api/v1/users` |
+| 사용자 조회 | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` | `GET /api/v1/users/{id}` |
+| 사용자 수정 | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` | `PUT /api/v1/users/{id}` |
+| 사용자 삭제 | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` | `DELETE /api/v1/admin/users/{id}` |
 
 ## 🔄 API 호환성
 
-**5개 백엔드는 모두 동일한 API 스펙**을 제공하므로 서로 교체 가능합니다:
+**6개 백엔드는 모두 동일한 API 스펙**을 제공하므로 서로 교체 가능합니다:
 
 ```bash
 # Go 백엔드 사용
@@ -150,22 +162,28 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
 curl -X POST http://localhost:8090/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"password123","name":"테스트"}'
+
+# Rust 백엔드 사용 (동일한 요청)
+curl -X POST http://localhost:8070/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123","name":"테스트"}'
 ```
 
 ## 🆚 백엔드 비교
 
-| 특징 | Go (Gin) | Python (FastAPI) | Java (Spring Boot) | Node.js (Express) | **PHP (Slim)** |
-|------|----------|------------------|--------------------|------------------|-----------------|
-| **성능** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **개발 속도** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **메모리 사용** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| **API 문서** | 수동 | 자동 생성 | 수동 | 수동 | 수동 |
-| **타입 안전성** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **엔터프라이즈** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **생태계** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **학습 곡선** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **호스팅 비용** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **웹 개발 특화** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 특징 | Go (Gin) | Python (FastAPI) | Java (Spring Boot) | Node.js (Express) | PHP (Slim) | **Rust (Axum)** |
+|------|----------|------------------|--------------------|------------------|------------|------------------|
+| **성능** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **개발 속도** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **메모리 사용** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **메모리 안전성** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **API 문서** | 수동 | 자동 생성 | 수동 | 수동 | 수동 | 수동 |
+| **타입 안전성** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **엔터프라이즈** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **생태계** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **학습 곡선** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+| **호스팅 비용** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **동시성 처리** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 
 ## 🐳 Docker 네트워킹
 
@@ -180,7 +198,7 @@ networks:
 ## 📊 데이터베이스 스키마
 
 ```sql
--- 공통 사용자 테이블 (5개 백엔드 모두 동일)
+-- 공통 사용자 테이블 (6개 백엔드 모두 동일)
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -221,6 +239,12 @@ CREATE TABLE users (
 - **프레임워크**: Slim Framework 4
 - **Database**: PDO with PostgreSQL
 - **특징**: 웹 개발 특화, 저렴한 호스팅, Clean Architecture
+
+### 🦀 Rust 백엔드
+- **언어**: Rust 1.75+
+- **프레임워크**: Axum
+- **ORM**: SQLx
+- **특징**: 최고 성능, 메모리 안전성, 제로 코스트 추상화
 
 ## 🛠️ 개발 팁
 
@@ -280,18 +304,24 @@ ab -n 1000 -c 10 http://localhost:8090/health    # PHP
 - `.env` 파일 생성 또는 환경 변수 설정
 - `DB_HOST`, `JWT_SECRET`, `APP_DEBUG` 등
 
+### **Rust 백엔드**
+- `Cargo.toml` 수정
+- 환경 변수: `DATABASE_URL`, `JWT_SECRET` 등
+
 ## 📈 사용 사례별 추천
 
 | 용도 | 추천 백엔드 | 이유 |
 |------|-------------|------|
 | **스타트업 MVP** | Python, PHP 또는 Node.js | 빠른 개발 속도 |
-| **대규모 서비스** | Go 또는 Java | 높은 성능과 안정성 |
+| **대규모 서비스** | Rust 또는 Go | 최고 성능과 메모리 효율성 |
 | **엔터프라이즈** | Java | 풍부한 엔터프라이즈 기능 |
-| **실시간 기능** | Node.js | 뛰어난 비동기 처리 |
-| **마이크로서비스** | Go | 작은 바이너리 크기 |
+| **실시간 기능** | Node.js 또는 Rust | 뛰어난 비동기 처리 |
+| **마이크로서비스** | Rust 또는 Go | 작은 바이너리 크기, 빠른 시작 |
 | **머신러닝 연동** | Python | ML 라이브러리 생태계 |
 | **웹 에이전시** | PHP | 저렴한 호스팅, 웹 개발 특화 |
 | **소규모 웹사이트** | PHP | 간편한 배포, 낮은 진입장벽 |
+| **시스템 프로그래밍** | Rust | 메모리 안전성, C/C++ 수준 성능 |
+| **금융/보안** | Rust 또는 Java | 높은 안전성과 신뢰성 |
 
 ## 🤝 기여하기
 
@@ -309,7 +339,8 @@ ab -n 1000 -c 10 http://localhost:8090/health    # PHP
 
 **💡 Tip**: 
 - **프로토타이핑**: Python, PHP 또는 Node.js
-- **운영 성능**: Go 또는 Java  
+- **운영 성능**: Rust 또는 Go  
 - **웹 에이전시**: PHP (저렴한 호스팅)
 - **팀 선호도**: 팀이 가장 익숙한 언어 선택
-- **하이브리드**: 상황에 따라 다른 백엔드 조합 사용 가능! 
+- **하이브리드**: 상황에 따라 다른 백엔드 조합 사용 가능!
+- **최고 성능이 필요한 경우**: Rust 선택 (메모리 안전성 + C++ 수준 성능) 

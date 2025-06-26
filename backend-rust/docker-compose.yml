@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sample_intranet_rust
+    ports:
+      - "8070:8070"
+    environment:
+      # 데이터베이스 설정
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/sample_intranet
+      
+      # 서버 설정
+      SERVER_ADDRESS: 0.0.0.0:8070
+      
+      # JWT 설정
+      JWT_SECRET: your-secret-key-change-in-production
+      JWT_EXPIRES_HOURS: 24
+      
+      # 로그 설정
+      RUST_LOG: sample_intranet_rust=debug,tower_http=debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - shared_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8070/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 공유 PostgreSQL 데이터베이스 (다른 백엔드와 동일)
+  postgres:
+    image: postgres:15
+    container_name: sample_intranet_postgres_rust
+    environment:
+      POSTGRES_DB: sample_intranet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_rust_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shared_network
+
+volumes:
+  postgres_rust_data:
+
+networks:
+  shared_network:
+    driver: bridge
+    external: true 
